@@ -311,7 +311,7 @@ export default function Lab1() {
         </a>
         {""} to get dummy text
       </p>
-      <a href="https://github.com/aamaanda/kanbas-react-web-app" id="wd-github">
+      <a href="https://github.com/NelsonDong41/kanbas-react-web-app" id="wd-github">
         Click here
       </a>
       {""} for my GitHub
