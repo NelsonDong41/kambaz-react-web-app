@@ -1,6 +1,9 @@
+import ModulesControls from "./ModuleControls";
+
 export default function Modules() {
   return (
     <div>
+      <ModulesControls />
       {/* Implement Collapse All button, View Progress button, etc. */}
       <ul id="wd-modules">
         <li className="wd-module">
