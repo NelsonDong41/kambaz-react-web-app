@@ -1,4 +1,5 @@
-import Table from "react-bootstrap/table";
+import Table from "react-bootstrap/esm/Table";
+
 export default function BootstrapTables() {
   return <>
     <div id="wd-css-styling-tables">
