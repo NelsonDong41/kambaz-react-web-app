@@ -22,11 +22,20 @@ export default function ModulesControls() {
           <Dropdown.Item id="wd-publish-modules-only">
             <GreenCheckmark /> Publish modules only
           </Dropdown.Item>
-          {/* Create two more items with IDs wd-unpublish-all-modules-and-items and wd-unpublish-modules-only with
-             labels Unpublish all modules and items and Unpublish modules only */}
+          <Dropdown.Item id="wd-unpublish-all-modules-and-items">
+            <GreenCheckmark /> Unpublish all modules and items
+          </Dropdown.Item>
+          <Dropdown.Item id="wd-unpublish-modules-only">
+            <GreenCheckmark /> Unpublish modules only
+          </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
-      {/* Implement the View Progress and Collapse All buttons with IDs wd-view-progress and wd-collapse-all */}
+      <Button variant="secondary" size="lg" className="me-1 float-end" id="wd-view-progress">
+        View Progress
+      </Button>
+      <Button variant="secondary" size="lg" className="me-1 float-end" id="wd-collapse-all">
+        Collapse All
+      </Button>
     </div>
   );
 }

@@ -32,7 +32,7 @@ export default function Dashboard() {
             <Card>
 
               <Link
-                to="/Kambaz/Courses/1234/Home"
+                to="/Kambaz/Courses/2345/Home"
                 className="wd-dashboard-course-link text-decoration-none text-dark"
               >
                 <Card.Img src="/images/calculator.png" width="100%" height={160} />
@@ -48,7 +48,7 @@ export default function Dashboard() {
             <Card>
 
               <Link
-                to="/Kambaz/Courses/1234/Home"
+                to="/Kambaz/Courses/3456/Home"
                 className="wd-dashboard-course-link text-decoration-none text-dark"
               >
                 <Card.Img src="/images/fish.png" width="100%" height={160} />
@@ -64,7 +64,7 @@ export default function Dashboard() {
             <Card>
 
               <Link
-                to="/Kambaz/Courses/1234/Home"
+                to="/Kambaz/Courses/4567/Home"
                 className="wd-dashboard-course-link text-decoration-none text-dark"
               >
                 <Card.Img src="/images/coin.png" width="100%" height={160} />
@@ -80,7 +80,7 @@ export default function Dashboard() {
             <Card>
 
               <Link
-                to="/Kambaz/Courses/1234/Home"
+                to="/Kambaz/Courses/5678/Home"
                 className="wd-dashboard-course-link text-decoration-none text-dark"
               >
                 <Card.Img src="/images/dice.png" width="100%" height={160} />
@@ -96,7 +96,7 @@ export default function Dashboard() {
             <Card>
 
               <Link
-                to="/Kambaz/Courses/1234/Home"
+                to="/Kambaz/Courses/6789/Home"
                 className="wd-dashboard-course-link text-decoration-none text-dark"
               >
                 <Card.Img src="/images/lottery.png" width="100%" height={160} />
@@ -112,7 +112,7 @@ export default function Dashboard() {
             <Card>
 
               <Link
-                to="/Kambaz/Courses/1234/Home"
+                to="/Kambaz/Courses/7890/Home"
                 className="wd-dashboard-course-link text-decoration-none text-dark"
               >
                 <Card.Img src="/images/stock.png" width="100%" height={160} />
@@ -121,7 +121,7 @@ export default function Dashboard() {
                   <Card.Text className="wd-dashboard-course-title">
                     Button variant="primary"ing
                   </Card.Text>
-                  <button> Go </button>
+                  <Button variant="primary"> Go </Button>
                 </Card.Body>
               </Link>
             </Card>
