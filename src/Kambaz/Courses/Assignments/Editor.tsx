@@ -7,8 +7,10 @@ import {
   FormSelect,
   Row,
 } from "react-bootstrap";
+import { Link, useParams } from "react-router";
 
 export default function AssignmentEditor() {
+  const { cid } = useParams();
   return (
     <div id="wd-assignments-editor">
       <FormGroup className="mb-3" controlId="wd-email">
@@ -121,8 +123,8 @@ export default function AssignmentEditor() {
         </Col>
         <hr />
         <Col>
-          <Button className="float-end" variant="secondary">Cancel</Button>
-          <Button className="float-end" variant="danger">Save</Button>
+          <Link to={`/Kambaz/Courses/${cid}/Assignments`}><Button className="float-end" variant="secondary">Cancel</Button></Link>
+          <Link to={`/Kambaz/Courses/${cid}/Assignments`}><Button className="float-end" variant="danger">Save</Button></Link>
         </Col>
       </FormGroup>
     </div>

@@ -5,8 +5,12 @@ import { BsGripVertical, BsPlus } from "react-icons/bs";
 import LessonControlButtons from "../Modules/LessonControlButtons";
 import { LuNotebookPen } from "react-icons/lu";
 import { IoEllipsisVertical } from "react-icons/io5";
+import { useParams } from "react-router-dom";
+import { assignments } from "../../Database";
 
 export default function Assignments() {
+  const { cid } = useParams();
+  console.log(cid)
   return (
     <div id="wd-assignments">
       <div className="d-flex col justify-content-between align-items-center mb-5">
@@ -53,72 +57,37 @@ export default function Assignments() {
             </div>
           </div>
           <ListGroup className="wd-lessons rounded-0">
-            <ListGroup.Item className="wd-lesson p-3 ps-1 d-flex flex-row align-items-center">
-              <BsGripVertical className="me-2 fs-3 flex-shrink-0 mx-2" />
-              <LuNotebookPen className="flex-shrink-0 mx-2" />
-              <span className="d-flex flex-column flex-grow-1 flex-shrink-1 mx-">
-                <a
-                  href="#/Kambaz/Courses/1234/Assignments/123"
-                  className="wd-assignment-link  text-decoration-none text-black"
+            {assignments
+              .filter((assignment) => assignment.course === cid)
+              .map((assignment) => (
+                <ListGroup.Item
+                  key={assignment._id}
+                  className="wd-lesson p-3 ps-1 d-flex flex-row align-items-center"
                 >
-                  <strong>A1</strong>
-                </a>
-                <div>
-                  <span>Multiple Modules | </span>
-                  <strong>Not available until | </strong>
-                  <span>May 6 at 12:00am | </span>
-                  <strong>Due </strong>
-                  <span>May 13 at 11:59pm | </span>
-                  <span>100 pts</span>
-                </div>
-              </span>
-              <LessonControlButtons />
-            </ListGroup.Item>
-            <ListGroup.Item className="wd-lesson p-3 ps-1 d-flex flex-row align-items-center">
-              <BsGripVertical className="me-2 fs-3 flex-shrink-0 mx-2" />
-              <LuNotebookPen className="flex-shrink-0 mx-2" />
-              <span className="d-flex flex-column flex-grow-1 flex-shrink-1 mx-2">
-                <a
-                  href="#/Kambaz/Courses/1234/Assignments/123"
-                  className="wd-assignment-link  text-decoration-none text-black"
-                >
-                  <strong>A2</strong>
-                </a>
-                <div>
-                  <span>Multiple Modules | </span>
-                  <strong>Not available until | </strong>
-                  <span>May 6 at 12:00am | </span>
-                  <strong>Due </strong>
-                  <span>May 13 at 11:59pm | </span>
-                  <span>100 pts</span>
-                </div>
-              </span>
-              <LessonControlButtons />
-            </ListGroup.Item>
-            <ListGroup.Item className="wd-lesson p-3 ps-1 d-flex flex-row align-items-center">
-              <BsGripVertical className="me-2 fs-3 flex-shrink-0 mx-2" />
-              <LuNotebookPen className="flex-shrink-0 mx-2" />
-              <span className="d-flex flex-column flex-grow-1 flex-shrink-1 mx-2">
-                <a
-                  href="#/Kambaz/Courses/1234/Assignments/123"
-                  className="wd-assignment-link  text-decoration-none text-black"
-                >
-                  <strong>A3</strong>
-                </a>
-                <div>
-                  <span>Multiple Modules | </span>
-                  <strong>Not available until | </strong>
-                  <span>May 6 at 12:00am | </span>
-                  <strong>Due </strong>
-                  <span>May 13 at 11:59pm | </span>
-                  <span>100 pts</span>
-                </div>
-              </span>
-              <LessonControlButtons />
-            </ListGroup.Item>
+                  <BsGripVertical className="me-2 fs-3 flex-shrink-0 mx-2" />
+                  <LuNotebookPen className="flex-shrink-0 mx-2" />
+                  <span className="d-flex flex-column flex-grow-1 flex-shrink-1 mx-2">
+                    <a
+                      href={`#/Kambaz/Courses/${cid}/Assignments/${assignment.course}`}
+                      className="wd-assignment-link  text-decoration-none text-black"
+                    >
+                      <strong>{assignment.title}</strong>
+                    </a>
+                    <div>
+                      <span>Multiple Modules | </span>
+                      <strong>Not available until | </strong>
+                      <span>May 6 at 12:00am | </span>
+                      <strong>Due </strong>
+                      <span>May 13 at 11:59pm | </span>
+                      <span>100 pts</span>
+                    </div>
+                  </span>
+                  <LessonControlButtons />
+                </ListGroup.Item>
+              ))}
           </ListGroup>
         </ListGroup.Item>
-      </ListGroup>
-    </div>
+      </ListGroup >
+    </div >
   );
 }
