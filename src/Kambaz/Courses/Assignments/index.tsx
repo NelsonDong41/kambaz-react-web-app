@@ -7,10 +7,13 @@ import { LuNotebookPen } from "react-icons/lu";
 import { IoEllipsisVertical } from "react-icons/io5";
 import { useParams } from "react-router-dom";
 import { assignments } from "../../Database";
+import { useSelector } from "react-redux";
 
 export default function Assignments() {
   const { cid } = useParams();
-  console.log(cid)
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const isFaculty = currentUser.role === "FACULTY";
+
   return (
     <div id="wd-assignments">
       <div className="d-flex col justify-content-between align-items-center mb-5">
@@ -67,12 +70,16 @@ export default function Assignments() {
                   <BsGripVertical className="me-2 fs-3 flex-shrink-0 mx-2" />
                   <LuNotebookPen className="flex-shrink-0 mx-2" />
                   <span className="d-flex flex-column flex-grow-1 flex-shrink-1 mx-2">
-                    <a
-                      href={`#/Kambaz/Courses/${cid}/Assignments/${assignment.course}`}
-                      className="wd-assignment-link  text-decoration-none text-black"
-                    >
+                    {isFaculty ? (
+                      <a
+                        href={`#/Kambaz/Courses/${cid}/Assignments/${assignment.course}`}
+                        className="wd-assignment-link  text-decoration-none text-black"
+                      >
+                        <strong>{assignment.title}</strong>
+                      </a>
+                    ) : (
                       <strong>{assignment.title}</strong>
-                    </a>
+                    )}
                     <div>
                       <span>Multiple Modules | </span>
                       <strong>Not available until | </strong>
@@ -87,7 +94,7 @@ export default function Assignments() {
               ))}
           </ListGroup>
         </ListGroup.Item>
-      </ListGroup >
-    </div >
+      </ListGroup>
+    </div>
   );
 }
