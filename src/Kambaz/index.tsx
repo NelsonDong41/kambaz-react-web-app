@@ -1,17 +1,18 @@
 import { Routes, Route, Navigate } from "react-router";
 import Account from "./Account";
-import Dashboard from "./Dashboard";
 import KambazNavigation from "./Navigation";
 import Courses from "./Courses";
 import "./styles.css";
 import PeopleTable from "./Courses/People/Table";
-import * as db from "./Database";
 import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import ProtectedRoute from "./Account/ProtectedRoute";
+import { useDispatch, useSelector } from "react-redux";
+import { addCourse, deleteCourse as deleteCourseReducer, updateCourse as updateCourseReducer } from "./Courses/reducer";
+import Dashboard from "./Dashboard";
 
 export default function Kambaz() {
-  const [courses, setCourses] = useState<any[]>(db.courses);
+  const dispatch = useDispatch();
+  const { courses } = useSelector((state: any) => state.coursesReducer);
   const [course, setCourse] = useState<any>({
     _id: "1234",
     name: "New Course",
@@ -21,21 +22,13 @@ export default function Kambaz() {
     description: "New Description",
   });
   const addNewCourse = () => {
-    setCourses([...courses, { ...course, _id: uuidv4() }]);
+    dispatch(addCourse(course));
   };
   const deleteCourse = (courseId: any) => {
-    setCourses(courses.filter((course) => course._id !== courseId));
+    dispatch(deleteCourseReducer(courseId));
   };
   const updateCourse = () => {
-    setCourses(
-      courses.map((c) => {
-        if (c._id === course._id) {
-          return course;
-        } else {
-          return c;
-        }
-      })
-    );
+    dispatch(updateCourseReducer(course));
   };
 
   return (
@@ -64,7 +57,7 @@ export default function Kambaz() {
             path="/Courses/:cid/*"
             element={
               <ProtectedRoute>
-                <Courses courses={courses} />{" "}
+                <Courses courses={courses} />
               </ProtectedRoute>
             }
           />

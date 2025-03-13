@@ -8,21 +8,34 @@ import {
   Row,
 } from "react-bootstrap";
 import { Link, useParams } from "react-router";
+import { addAssignment, updateAssignment } from "./reducer";
+import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 
 export default function AssignmentEditor() {
-  const { cid } = useParams();
+  const dispatch = useDispatch();
+  const { cid, aid } = useParams();
+  const { assignments } = useSelector((state: any) => state.assignmentReducer);
+  let currentAssignment = assignments.find((assignment: any) => assignment._id === aid);
+  const [assignment, setAssignment] = useState<any>(currentAssignment);
+  const title = assignment?.title || "";
+  const desciption = assignment?.description || "";
+  const points = assignment?.points || 100;
+  const due = assignment?.due || "";
+  const from = assignment?.from || "";
+  const until = assignment?.until || "";
+
   return (
     <div id="wd-assignments-editor">
       <FormGroup className="mb-3" controlId="wd-email">
         <FormLabel>Assignment Name</FormLabel>
-        <FormControl type="text" defaultValue="A1" />
+        <FormControl type="text" placeholder="New Assignment" value={title} onChange={(e) => setAssignment((prev: any) => ({ ...prev, title: e.target.value }))} />
         <br />
         <FormControl
           as="textarea"
           rows={10}
-          defaultValue={
-            "The assignment is available online \n\n Submit a link to the landing page of your Web application running on Netlify. \n\n The Landing page should include the following:\n\n- Your full name and section \n- Links to each of the lab assignments \n- Link to the Kanbas application \n- Links to all relevant source code repositories"
-          }
+          value={desciption}
+          onChange={(e) => setAssignment((prev: any) => ({ ...prev, desciption: e.target.value }))}
         />
       </FormGroup>
       <FormGroup as={Row}>
@@ -30,7 +43,7 @@ export default function AssignmentEditor() {
           <FormLabel>Points</FormLabel>
         </Col>
         <Col xs={9}>
-          <FormControl type="text" defaultValue="100" />
+          <FormControl type="text" value={points} onChange={(e) => setAssignment((prev: any) => ({ ...prev, points: e.target.value }))} />
         </Col>
       </FormGroup>
       <FormGroup as={Row}>
@@ -102,6 +115,8 @@ export default function AssignmentEditor() {
             <FormControl
               type="date"
               name="duedate"
+              value={due}
+              onChange={(e) => setAssignment((prev: any) => ({ ...prev, due: e.target.value }))}
             />
             <Row>
               <Col>
@@ -109,6 +124,8 @@ export default function AssignmentEditor() {
                 <FormControl
                   type="date"
                   name="duedate"
+                  value={from}
+                  onChange={(e) => setAssignment((prev: any) => ({ ...prev, from: e.target.value }))}
                 />
               </Col>
               <Col>
@@ -116,6 +133,8 @@ export default function AssignmentEditor() {
                 <FormControl
                   type="date"
                   name="duedate"
+                  value={until}
+                  onChange={(e) => setAssignment((prev: any) => ({ ...prev, until: e.target.value }))}
                 />
               </Col>
             </Row>
@@ -124,7 +143,13 @@ export default function AssignmentEditor() {
         <hr />
         <Col>
           <Link to={`/Kambaz/Courses/${cid}/Assignments`}><Button className="float-end" variant="secondary">Cancel</Button></Link>
-          <Link to={`/Kambaz/Courses/${cid}/Assignments`}><Button className="float-end" variant="danger">Save</Button></Link>
+          <Link to={`/Kambaz/Courses/${cid}/Assignments`}><Button className="float-end" variant="danger" onClick={() => {
+            if (currentAssignment) {
+              dispatch(updateAssignment({ ...assignment, course: cid }));
+            } else {
+              dispatch(addAssignment({ ...assignment, course: cid }));
+            }
+          }}>Save</Button></Link>
         </Col>
       </FormGroup>
     </div>

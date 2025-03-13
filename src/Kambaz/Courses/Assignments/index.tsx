@@ -6,12 +6,16 @@ import LessonControlButtons from "../Modules/LessonControlButtons";
 import { LuNotebookPen } from "react-icons/lu";
 import { IoEllipsisVertical } from "react-icons/io5";
 import { useParams } from "react-router-dom";
-import { assignments } from "../../Database";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router";
+import { deleteAssignment } from "./reducer";
+import { FaTrash } from "react-icons/fa";
 
 export default function Assignments() {
+  const dispatch = useDispatch()
   const { cid } = useParams();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const { assignments } = useSelector((state: any) => state.assignmentReducer);
   const isFaculty = currentUser.role === "FACULTY";
 
   return (
@@ -42,7 +46,9 @@ export default function Assignments() {
             className="me-1 justify-content-end"
             id="wd-view-progress"
           >
-            + Assignment
+            <Link className="text-decoration-none text-white" to={`/Kambaz/Courses/${cid}/Assignments/new`}>
+              + Assignment
+            </Link>
           </Button>
         </div>
       </div>
@@ -61,8 +67,8 @@ export default function Assignments() {
           </div>
           <ListGroup className="wd-lessons rounded-0">
             {assignments
-              .filter((assignment) => assignment.course === cid)
-              .map((assignment) => (
+              .filter((assignment: any) => assignment.course === cid)
+              .map((assignment: any) => (
                 <ListGroup.Item
                   key={assignment._id}
                   className="wd-lesson p-3 ps-1 d-flex flex-row align-items-center"
@@ -72,7 +78,7 @@ export default function Assignments() {
                   <span className="d-flex flex-column flex-grow-1 flex-shrink-1 mx-2">
                     {isFaculty ? (
                       <a
-                        href={`#/Kambaz/Courses/${cid}/Assignments/${assignment.course}`}
+                        href={`#/Kambaz/Courses/${cid}/Assignments/${assignment._id}`}
                         className="wd-assignment-link  text-decoration-none text-black"
                       >
                         <strong>{assignment.title}</strong>
@@ -83,12 +89,17 @@ export default function Assignments() {
                     <div>
                       <span>Multiple Modules | </span>
                       <strong>Not available until | </strong>
-                      <span>May 6 at 12:00am | </span>
+                      <span>{assignment.from} | </span>
                       <strong>Due </strong>
-                      <span>May 13 at 11:59pm | </span>
-                      <span>100 pts</span>
+                      <span>{assignment.due} | </span>
+                      <span>{assignment.points} pts</span>
                     </div>
                   </span>
+                  <FaTrash
+                    className="text-danger me-2 mb-1"
+                    cursor={"pointer"}
+                    onClick={() => dispatch(deleteAssignment(assignment._id))}
+                  />
                   <LessonControlButtons />
                 </ListGroup.Item>
               ))}
