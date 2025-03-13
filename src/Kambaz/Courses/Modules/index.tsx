@@ -38,7 +38,7 @@ export default function Modules() {
         {modules
           .filter((module: any) => module.course === cid)
           .map((module: any) => (
-            <ListGroup.Item className="wd-module p-0 mb-5 fs-5 border-gray">
+            <ListGroup.Item className="wd-module p-0 mb-5 fs-5 border-gray" key={module._id}>
               <div className="wd-title p-3 ps-2 bg-secondary">
                 <BsGripVertical className="me-2 fs-3" />{" "}
                 {!module.editing && module.name}
@@ -71,7 +71,7 @@ export default function Modules() {
               {module.lessons && (
                 <ListGroup className="wd-lessons rounded-0">
                   {module.lessons.map((lesson: any) => (
-                    <ListGroup.Item className="wd-lesson p-3 ps-1">
+                    <ListGroup.Item className="wd-lesson p-3 ps-1" key={module._id + lesson._id}>
                       <BsGripVertical className="me-2 fs-3" />
                       {lesson.name} <LessonControlButtons />
                     </ListGroup.Item>

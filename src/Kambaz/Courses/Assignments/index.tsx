@@ -1,4 +1,4 @@
-import { Button, InputGroup, ListGroup } from "react-bootstrap";
+import { Button, InputGroup, ListGroup, Modal } from "react-bootstrap";
 import { IoIosSearch } from "react-icons/io";
 import { Form, Row, Col } from "react-bootstrap";
 import { BsGripVertical, BsPlus } from "react-icons/bs";
@@ -10,13 +10,33 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router";
 import { deleteAssignment } from "./reducer";
 import { FaTrash } from "react-icons/fa";
+import { useState } from "react";
 
 export default function Assignments() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { cid } = useParams();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { assignments } = useSelector((state: any) => state.assignmentReducer);
-  const isFaculty = currentUser.role === "FACULTY";
+  const isFaculty = currentUser?.role === "FACULTY";
+
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [selectedAssignment, setSelectedAssignment] = useState<any>(null);
+
+  const handleDeleteClick = (assignment: any) => {
+    setSelectedAssignment(assignment);
+    setShowDeleteDialog(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (selectedAssignment) {
+      dispatch(deleteAssignment(selectedAssignment._id));
+    }
+    setShowDeleteDialog(false);
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteDialog(false);
+  };
 
   return (
     <div id="wd-assignments">
@@ -46,12 +66,16 @@ export default function Assignments() {
             className="me-1 justify-content-end"
             id="wd-view-progress"
           >
-            <Link className="text-decoration-none text-white" to={`/Kambaz/Courses/${cid}/Assignments/new`}>
+            <Link
+              className="text-decoration-none text-white"
+              to={`/Kambaz/Courses/${cid}/Assignments/new`}
+            >
               + Assignment
             </Link>
           </Button>
         </div>
       </div>
+
       <ListGroup className="rounded-0" id="wd-modules">
         <ListGroup.Item className="wd-module p-0 mb-5 fs-5 border-gray">
           <div className="wd-title p-4 ps-2 bg-secondary">
@@ -79,7 +103,7 @@ export default function Assignments() {
                     {isFaculty ? (
                       <a
                         href={`#/Kambaz/Courses/${cid}/Assignments/${assignment._id}`}
-                        className="wd-assignment-link  text-decoration-none text-black"
+                        className="wd-assignment-link text-decoration-none text-black"
                       >
                         <strong>{assignment.title}</strong>
                       </a>
@@ -87,25 +111,52 @@ export default function Assignments() {
                       <strong>{assignment.title}</strong>
                     )}
                     <div>
-                      <span>Multiple Modules | </span>
-                      <strong>Not available until | </strong>
-                      <span>{assignment.from} | </span>
-                      <strong>Due </strong>
-                      <span>{assignment.due} | </span>
-                      <span>{assignment.points} pts</span>
+                      <span className="d-block">
+                        <span style={{ color: "#DC3545" }}>
+                          Multiple Modules
+                        </span>{" "}
+                        | <b>Not available until </b> {assignment.availableDate}{" "}
+                        |
+                      </span>
+                      <span className="d-block">
+                        {" "}
+                        <b>Due </b> {assignment.dueDate} | {assignment.points}
+                        pts
+                      </span>
                     </div>
                   </span>
-                  <FaTrash
-                    className="text-danger me-2 mb-1"
-                    cursor={"pointer"}
-                    onClick={() => dispatch(deleteAssignment(assignment._id))}
-                  />
+                  {isFaculty && (
+                    <FaTrash
+                      className="text-danger me-2 mb-1"
+                      cursor={"pointer"}
+                      onClick={() => handleDeleteClick(assignment)}
+                    />
+                  )}
                   <LessonControlButtons />
                 </ListGroup.Item>
               ))}
           </ListGroup>
         </ListGroup.Item>
       </ListGroup>
+
+      <Modal show={showDeleteDialog} onHide={handleDeleteCancel} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Deletion</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete{" "}
+          <strong>{selectedAssignment?.title}</strong>? This action cannot be
+          undone.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleDeleteCancel}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleDeleteConfirm}>
+            Yes, Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

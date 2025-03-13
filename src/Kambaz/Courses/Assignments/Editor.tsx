@@ -35,7 +35,7 @@ export default function AssignmentEditor() {
           as="textarea"
           rows={10}
           value={desciption}
-          onChange={(e) => setAssignment((prev: any) => ({ ...prev, desciption: e.target.value }))}
+          onChange={(e) => setAssignment((prev: any) => ({ ...prev, description: e.target.value }))}
         />
       </FormGroup>
       <FormGroup as={Row}>
