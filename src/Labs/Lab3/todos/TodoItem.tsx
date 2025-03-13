@@ -1,7 +1,17 @@
-const TodoItem = ({ todo = {
-    done: true, title: 'Buy milk',
-    status: 'COMPLETED'
-} }) => {
+const TodoItem = ({
+    todo = {
+        done: true,
+        title: 'Buy milk',
+        status: 'COMPLETED'
+    } }:
+    {
+        todo:
+        {
+            done: boolean,
+            title: string,
+            status: string
+        }
+    }) => {
     return (
         <li className="list-group-item">
             <input type="checkbox" className="me-2"
