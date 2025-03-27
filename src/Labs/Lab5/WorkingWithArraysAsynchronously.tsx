@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
 import * as client from "./client";
 import { FormControl, ListGroup } from "react-bootstrap";
@@ -6,7 +7,6 @@ import { TiDelete } from "react-icons/ti";
 import { FaPencil } from "react-icons/fa6";
 
 export default function WorkingWithArraysAsynchronously() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [todos, setTodos] = useState<any[]>([]);
   const [errorMessage, setErrorMessage] = useState(null);
   const updateTodo = async (todo: any) => {
@@ -37,7 +37,6 @@ export default function WorkingWithArraysAsynchronously() {
     const todos = await client.fetchTodos();
     setTodos(todos);
   };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const removeTodo = async (todo: any) => {
     const updatedTodos = await client.removeTodo(todo);
     setTodos(updatedTodos);

@@ -11,12 +11,13 @@ import { Link, useParams } from "react-router";
 import { addAssignment, updateAssignment } from "./reducer";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
+import * as client from "./client"
 
 export default function AssignmentEditor() {
   const dispatch = useDispatch();
   const { cid, aid } = useParams();
   const { assignments } = useSelector((state: any) => state.assignmentReducer);
-  let currentAssignment = assignments.find((assignment: any) => assignment._id === aid);
+  const currentAssignment = assignments.find((assignment: any) => assignment._id === aid);
   const [assignment, setAssignment] = useState<any>(currentAssignment);
   const title = assignment?.title || "";
   const desciption = assignment?.description || "";
@@ -143,10 +144,12 @@ export default function AssignmentEditor() {
         <hr />
         <Col>
           <Link to={`/Kambaz/Courses/${cid}/Assignments`}><Button className="float-end" variant="secondary">Cancel</Button></Link>
-          <Link to={`/Kambaz/Courses/${cid}/Assignments`}><Button className="float-end" variant="danger" onClick={() => {
+          <Link to={`/Kambaz/Courses/${cid}/Assignments`}><Button className="float-end" variant="danger" onClick={async () => {
             if (currentAssignment) {
+              await client.updateAssignment({ ...assignment, course: cid })
               dispatch(updateAssignment({ ...assignment, course: cid }));
             } else {
+              await client.addAssignment({ ...assignment, course: cid })
               dispatch(addAssignment({ ...assignment, course: cid }));
             }
           }}>Save</Button></Link>

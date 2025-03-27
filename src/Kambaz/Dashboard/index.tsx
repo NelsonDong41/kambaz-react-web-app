@@ -2,6 +2,7 @@ import { Button, Card, Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleEnrollment, toggleShowAllEnrollments } from "./reducer";
+import * as client from "./client"
 
 export default function Dashboard(
   {
@@ -23,7 +24,23 @@ export default function Dashboard(
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { enrollments, showAllEnrollments } = useSelector((state: any) => state.enrollmentReducer);
+
+  const handleToggleEnrollment = async (courseId: string) => {
+    await client.toggleEnrollment(courseId)
+    dispatch(toggleEnrollment({ userId: currentUser._id, courseId: courseId }))
+  }
+
   const isFaculty = currentUser.role === "FACULTY";
+
+  const shownCourses = courses
+    .filter((course) =>
+      showAllEnrollments ||
+      enrollments.some(
+        (enrollment: any) =>
+          enrollment.user === currentUser._id &&
+          enrollment.course === course._id
+      )
+    )
   return (
     <div id="wd-dashboard">
       <h1 id="wd-dashboard-title">Dashboard</h1>
@@ -62,21 +79,13 @@ export default function Dashboard(
         </>
       }
       <div className="d-flex justify-content-between">
-        <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2>
+        <h2 id="wd-dashboard-published">Published Courses ({shownCourses.length})</h2>
         <Button onClick={() => dispatch(toggleShowAllEnrollments())}>Enrollments</Button>
       </div>
       <hr />
       <div id="wd-dashboard-courses">
         <Row xs={1} md={5} className="g-4">
-          {courses
-            .filter((course) =>
-              showAllEnrollments ||
-              enrollments.some(
-                (enrollment: any) =>
-                  enrollment.user === currentUser._id &&
-                  enrollment.course === course._id
-              )
-            )
+          {shownCourses
             .map((course) => {
               const isEnrolled = enrollments.some(
                 (enrollment: any) =>
@@ -143,7 +152,7 @@ export default function Dashboard(
                           className="float-end me-2"
                           onClick={(e) => {
                             e.preventDefault();
-                            dispatch(toggleEnrollment({ userId: currentUser._id, courseId: course._id }))
+                            handleToggleEnrollment(course._id)
                           }}>
                           {isEnrolled ? "Unenroll" : "Enroll"}
                         </Button>

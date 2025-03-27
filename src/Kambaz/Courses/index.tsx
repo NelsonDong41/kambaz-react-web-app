@@ -12,7 +12,6 @@ export default function Courses({ courses }: { courses: any[] }) {
   const course = courses.find((course) => course._id === cid);
   const { pathname } = useLocation();
 
-
   return (
     <div id="wd-courses">
       <h2 className="text-danger">
@@ -21,7 +20,7 @@ export default function Courses({ courses }: { courses: any[] }) {
 
       <div className="d-flex">
         <div className="d-none d-md-block">
-          <CourseNavigation />
+          <CourseNavigation course={course} />
         </div>
         <div className="flex-fill">
           <Routes>
