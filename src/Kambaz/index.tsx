@@ -6,10 +6,9 @@ import "./styles.css";
 import PeopleTable from "./Courses/People/Table";
 import { useEffect, useState } from "react";
 import ProtectedRoute from "./Account/ProtectedRoute";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import Dashboard from "./Dashboard";
 import Session from "./Account/Session";
-// import * as client from "./Courses/client";
 import * as userClient from "./Account/client";
 import * as courseClient from "./Courses/client";
 
