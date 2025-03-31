@@ -13,6 +13,7 @@ export default function Signin() {
     const user = await client.signin(credentials);
     console.log(user);
     if (!user) return;
+    console.log("PASS GUARD")
     dispatch(setCurrentUser(user));
 
     const enrollments = await client.getEnrollments()
