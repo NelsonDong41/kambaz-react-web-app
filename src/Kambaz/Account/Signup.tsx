@@ -4,7 +4,6 @@ import * as client from "./client";
 import { useDispatch } from "react-redux";
 import { setCurrentUser } from "./reducer";
 import { FormControl } from "react-bootstrap";
-import { setEnrollments } from "../Dashboard/reducer";
 export default function Signup() {
   const [user, setUser] = useState<any>({});
   const navigate = useNavigate();
@@ -12,9 +11,6 @@ export default function Signup() {
   const signup = async () => {
     const currentUser = await client.signup(user);
     dispatch(setCurrentUser(currentUser));
-
-    const enrollments = await client.getEnrollments()
-    dispatch(setEnrollments(enrollments))
     navigate("/Kambaz/Account/Profile");
   };
   return (

@@ -2,7 +2,6 @@ import * as client from "./client";
 import { useEffect, useState } from "react";
 import { setCurrentUser } from "./reducer";
 import { useDispatch } from "react-redux";
-import { setEnrollments } from "../Dashboard/reducer";
 export default function Session({ children }: { children: any }) {
   const [pending, setPending] = useState(true);
   const dispatch = useDispatch();
@@ -10,9 +9,6 @@ export default function Session({ children }: { children: any }) {
     try {
       const currentUser = await client.profile();
       dispatch(setCurrentUser(currentUser));
-
-      const enrollments = await client.getEnrollments()
-      dispatch(setEnrollments(enrollments))
     } catch (err: any) {
       console.error(err);
     }
