@@ -1,8 +1,9 @@
 import { Button, Card, Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleEnrollment, toggleShowAllEnrollments } from "./reducer";
+import { setEnrollments, toggleEnrollment, toggleShowAllEnrollments } from "./reducer";
 import * as client from "./client"
+import { useEffect } from "react";
 
 export default function Dashboard(
   {
@@ -21,8 +22,20 @@ export default function Dashboard(
     updateCourse: () => void;
   }
 ) {
+
+  console.log("ENTER DASHBOARD")
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
+
+  const getEnrollments = async () => {
+    const enrollments = await client.getEnrollments();
+    dispatch(setEnrollments(enrollments));
+  };
+
+  useEffect(() => {
+    getEnrollments()
+  }, [])
+
   const { enrollments, showAllEnrollments } = useSelector((state: any) => state.enrollmentReducer);
 
   const handleToggleEnrollment = async (courseId: string) => {

@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { setCurrentUser } from "./reducer";
 import { useDispatch } from "react-redux";
 import * as client from "./client";
-import { setEnrollments } from "../Dashboard/reducer";
 
 export default function Signin() {
   const [credentials, setCredentials] = useState<any>({});
@@ -15,9 +14,6 @@ export default function Signin() {
     if (!user) return;
     console.log("PASS GUARD")
     dispatch(setCurrentUser(user));
-
-    const enrollments = await client.getEnrollments()
-    dispatch(setEnrollments(enrollments))
     navigate("/Kambaz/Dashboard");
   };
 
