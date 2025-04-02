@@ -11,13 +11,15 @@ import { Link, useParams } from "react-router";
 import { addAssignment, updateAssignment } from "./reducer";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import * as client from "./client"
+import * as client from "./client";
 
 export default function AssignmentEditor() {
   const dispatch = useDispatch();
   const { cid, aid } = useParams();
   const { assignments } = useSelector((state: any) => state.assignmentReducer);
-  const currentAssignment = assignments.find((assignment: any) => assignment._id === aid);
+  const currentAssignment = assignments.find(
+    (assignment: any) => assignment._id === aid
+  );
   const [assignment, setAssignment] = useState<any>(currentAssignment);
   const title = assignment?.title || "";
   const desciption = assignment?.description || "";
@@ -30,13 +32,25 @@ export default function AssignmentEditor() {
     <div id="wd-assignments-editor">
       <FormGroup className="mb-3" controlId="wd-email">
         <FormLabel>Assignment Name</FormLabel>
-        <FormControl type="text" placeholder="New Assignment" value={title} onChange={(e) => setAssignment((prev: any) => ({ ...prev, title: e.target.value }))} />
+        <FormControl
+          type="text"
+          placeholder="New Assignment"
+          value={title}
+          onChange={(e) =>
+            setAssignment((prev: any) => ({ ...prev, title: e.target.value }))
+          }
+        />
         <br />
         <FormControl
           as="textarea"
           rows={10}
           value={desciption}
-          onChange={(e) => setAssignment((prev: any) => ({ ...prev, description: e.target.value }))}
+          onChange={(e) =>
+            setAssignment((prev: any) => ({
+              ...prev,
+              description: e.target.value,
+            }))
+          }
         />
       </FormGroup>
       <FormGroup as={Row}>
@@ -44,7 +58,16 @@ export default function AssignmentEditor() {
           <FormLabel>Points</FormLabel>
         </Col>
         <Col xs={9}>
-          <FormControl type="text" value={points} onChange={(e) => setAssignment((prev: any) => ({ ...prev, points: e.target.value }))} />
+          <FormControl
+            type="text"
+            value={points}
+            onChange={(e) =>
+              setAssignment((prev: any) => ({
+                ...prev,
+                points: e.target.value,
+              }))
+            }
+          />
         </Col>
       </FormGroup>
       <FormGroup as={Row}>
@@ -84,19 +107,44 @@ export default function AssignmentEditor() {
               <option value="Physical">Physical</option>
             </FormSelect>
             <form>
-              <input type="checkbox" className="m-2" id="textEntry" name="textEntry" />
+              <input
+                type="checkbox"
+                className="m-2"
+                id="textEntry"
+                name="textEntry"
+              />
               <label htmlFor="textEntry">Text Entry</label>
               <br />
-              <input type="checkbox" className="m-2" id="websiteUrl" name="websiteUrl" />
+              <input
+                type="checkbox"
+                className="m-2"
+                id="websiteUrl"
+                name="websiteUrl"
+              />
               <label htmlFor="websiteUrl">Website URL</label>
               <br />
-              <input type="checkbox" className="m-2" id="mediaRecordings" name="mediaRecordings" />
+              <input
+                type="checkbox"
+                className="m-2"
+                id="mediaRecordings"
+                name="mediaRecordings"
+              />
               <label htmlFor="mediaRecordings">Media Recordings</label>
               <br />
-              <input type="checkbox" className="m-2" id="studentAnnotation" name="studentAnnotation" />
+              <input
+                type="checkbox"
+                className="m-2"
+                id="studentAnnotation"
+                name="studentAnnotation"
+              />
               <label htmlFor="studentAnnotation">Student Annotation</label>
               <br />
-              <input type="checkbox" className="m-2" id="fileUploads" name="fileUploads" />
+              <input
+                type="checkbox"
+                className="m-2"
+                id="fileUploads"
+                name="fileUploads"
+              />
               <label htmlFor="fileUploads">File Uploads</label>
               <br />
             </form>
@@ -117,7 +165,9 @@ export default function AssignmentEditor() {
               type="date"
               name="duedate"
               value={due}
-              onChange={(e) => setAssignment((prev: any) => ({ ...prev, due: e.target.value }))}
+              onChange={(e) =>
+                setAssignment((prev: any) => ({ ...prev, due: e.target.value }))
+              }
             />
             <Row>
               <Col>
@@ -126,7 +176,12 @@ export default function AssignmentEditor() {
                   type="date"
                   name="duedate"
                   value={from}
-                  onChange={(e) => setAssignment((prev: any) => ({ ...prev, from: e.target.value }))}
+                  onChange={(e) =>
+                    setAssignment((prev: any) => ({
+                      ...prev,
+                      from: e.target.value,
+                    }))
+                  }
                 />
               </Col>
               <Col>
@@ -135,7 +190,12 @@ export default function AssignmentEditor() {
                   type="date"
                   name="duedate"
                   value={until}
-                  onChange={(e) => setAssignment((prev: any) => ({ ...prev, until: e.target.value }))}
+                  onChange={(e) =>
+                    setAssignment((prev: any) => ({
+                      ...prev,
+                      until: e.target.value,
+                    }))
+                  }
                 />
               </Col>
             </Row>
@@ -143,16 +203,28 @@ export default function AssignmentEditor() {
         </Col>
         <hr />
         <Col>
-          <Link to={`/Kambaz/Courses/${cid}/Assignments`}><Button className="float-end" variant="secondary">Cancel</Button></Link>
-          <Link to={`/Kambaz/Courses/${cid}/Assignments`}><Button className="float-end" variant="danger" onClick={async () => {
-            if (currentAssignment) {
-              await client.updateAssignment({ ...assignment, course: cid })
-              dispatch(updateAssignment({ ...assignment, course: cid }));
-            } else {
-              await client.addAssignment({ ...assignment, course: cid })
-              dispatch(addAssignment({ ...assignment, course: cid }));
-            }
-          }}>Save</Button></Link>
+          <Link to={`/Kambaz/Courses/${cid}/Assignments`}>
+            <Button className="float-end" variant="secondary">
+              Cancel
+            </Button>
+          </Link>
+          <Link to={`/Kambaz/Courses/${cid}/Assignments`}>
+            <Button
+              className="float-end"
+              variant="danger"
+              onClick={async () => {
+                if (currentAssignment) {
+                  await client.updateAssignment({ ...assignment, course: cid });
+                  dispatch(updateAssignment({ ...assignment, course: cid }));
+                } else {
+                  await client.addAssignment({ ...assignment, course: cid });
+                  dispatch(addAssignment({ ...assignment, course: cid }));
+                }
+              }}
+            >
+              Save
+            </Button>
+          </Link>
         </Col>
       </FormGroup>
     </div>

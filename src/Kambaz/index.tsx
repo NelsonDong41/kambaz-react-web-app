@@ -31,16 +31,20 @@ export default function Kambaz() {
   const deleteCourse = async (courseId: string) => {
     await courseClient.deleteCourse(courseId);
     setCourses(courses.filter((course) => course._id !== courseId));
-  }
+  };
 
   const updateCourse = async () => {
     await courseClient.updateCourse(course);
-    setCourses(courses.map((c) => {
-      if (c._id === course._id) { return course; }
-      else { return c; }
-    })
-    )
-  }
+    setCourses(
+      courses.map((c) => {
+        if (c._id === course._id) {
+          return course;
+        } else {
+          return c;
+        }
+      })
+    );
+  };
 
   const fetchCourses = async () => {
     try {
@@ -53,7 +57,6 @@ export default function Kambaz() {
   useEffect(() => {
     fetchCourses();
   }, [currentUser]);
-
 
   return (
     <Session>
