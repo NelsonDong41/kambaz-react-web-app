@@ -15,7 +15,9 @@ export const createCourse = async (course: any) => {
 };
 
 export const signin = async (credentials: any) => {
+  console.log("FRONTEND SIGNING IN")
   const response = await axiosWithCredentials.post(`${USERS_API}/signin`, credentials);
+  console.log("FRONTEND SIGNING IN RESPONSE", response)
   return response.data;
 };
 
