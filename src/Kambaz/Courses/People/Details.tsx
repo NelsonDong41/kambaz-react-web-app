@@ -10,6 +10,8 @@ export default function PeopleDetails() {
     const [user, setUser] = useState<any>({});
     const [name, setName] = useState("");
     const [editing, setEditing] = useState(false);
+    const navigate = useNavigate();
+
     const saveUser = async () => {
         const [firstName, lastName] = name.split(" ");
         const updatedUser = { ...user, firstName, lastName };
@@ -19,7 +21,6 @@ export default function PeopleDetails() {
         navigate(-1);
     };
 
-    const navigate = useNavigate();
     const deleteUser = async (uid: string) => {
         await client.deleteUser(uid);
         navigate(-1);

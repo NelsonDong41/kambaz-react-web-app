@@ -1,8 +1,6 @@
 import { Button, Card, Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { toggleEnrollment, toggleShowAllEnrollments } from "./reducer";
-import * as client from "./client"
+import { useSelector } from "react-redux";
 
 export default function Dashboard(
   {
@@ -12,6 +10,9 @@ export default function Dashboard(
     addNewCourse,
     deleteCourse,
     updateCourse,
+    enrolling,
+    setEnrolling,
+    updateEnrollment
   }: {
     courses: any[];
     course: any;
@@ -19,31 +20,20 @@ export default function Dashboard(
     addNewCourse: () => void;
     deleteCourse: (course: any) => void;
     updateCourse: () => void;
+    enrolling: boolean;
+    setEnrolling: (enrolling: boolean) => void;
+    updateEnrollment: (courseId: string, enrolled: boolean) => void
   }
 ) {
-  const dispatch = useDispatch();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const { enrollments, showAllEnrollments } = useSelector((state: any) => state.enrollmentReducer);
-
-  const handleToggleEnrollment = async (courseId: string) => {
-    await client.toggleEnrollment(courseId)
-    dispatch(toggleEnrollment({ userId: currentUser._id, courseId: courseId }))
-  }
+  const { enrollments } = useSelector((state: any) => state.enrollmentReducer);
 
   const isFaculty = currentUser.role === "FACULTY";
 
-  const shownCourses = courses
-    .filter((course) =>
-      showAllEnrollments ||
-      enrollments.some(
-        (enrollment: any) =>
-          enrollment.user === currentUser._id &&
-          enrollment.course === course._id
-      )
-    )
   return (
     <div id="wd-dashboard">
       <h1 id="wd-dashboard-title">Dashboard</h1>
+
       <hr />
       {isFaculty &&
         <>
@@ -79,13 +69,14 @@ export default function Dashboard(
         </>
       }
       <div className="d-flex justify-content-between">
-        <h2 id="wd-dashboard-published">Published Courses ({shownCourses.length})</h2>
-        <Button onClick={() => dispatch(toggleShowAllEnrollments())}>Enrollments</Button>
-      </div>
+        <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2>
+        <button onClick={() => setEnrolling(!enrolling)} className="float-end btn btn-primary" >
+          {enrolling ? "My Courses" : "All Courses"}
+        </button>      </div>
       <hr />
       <div id="wd-dashboard-courses">
         <Row xs={1} md={5} className="g-4">
-          {shownCourses
+          {courses
             .map((course) => {
               const isEnrolled = enrollments.some(
                 (enrollment: any) =>
@@ -116,6 +107,15 @@ export default function Dashboard(
                       />
                       <Card.Body style={{ flexGrow: 1 }}>
                         <Card.Title className="wd-dashboard-course-title">
+                          {enrolling && (
+                            <button onClick={(event) => {
+                              event.preventDefault();
+                              updateEnrollment(course._id, !course.enrolled);
+                            }}
+                              className={`btn ${course.enrolled ? "btn-danger" : "btn-success"} float-end`} >
+                              {course.enrolled ? "Unenroll" : "Enroll"}
+                            </button>
+                          )}
                           {course.name}
                         </Card.Title>
                         <Card.Text
@@ -147,15 +147,6 @@ export default function Dashboard(
                             Edit
                           </button>
                         </>}
-                        <Button
-                          variant={isEnrolled ? "danger" : "success"}
-                          className="float-end me-2"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleToggleEnrollment(course._id)
-                          }}>
-                          {isEnrolled ? "Unenroll" : "Enroll"}
-                        </Button>
                       </Card.Body>
                     </Link>
                   </Card>

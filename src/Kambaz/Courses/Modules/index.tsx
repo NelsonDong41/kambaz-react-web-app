@@ -6,8 +6,8 @@ import LessonControlButtons from "./LessonControlButtons";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { setModules, addModule, editModule, updateModule, deleteModule } from "./reducer";
-import * as coursesClient from "../client";
 import { useSelector, useDispatch } from "react-redux";
+import * as coursesClient from "../client";
 import * as modulesClient from "./client";
 
 export default function Modules() {
@@ -18,31 +18,51 @@ export default function Modules() {
 
   const dispatch = useDispatch();
 
-  const createModuleForCourse = async () => {
-    if (!cid) return;
-    const newModule = { name: moduleName, course: cid };
-    const module = await coursesClient.createModuleForCourse(cid, newModule);
-    dispatch(addModule(module));
-  };
+  // const createModuleForCourse = async () => {
+  //   if (!cid) return;
+  //   const newModule = { name: moduleName, course: cid };
+  //   const module = await coursesClient.createModuleForCourse(cid, newModule);
+  //   dispatch(addModule(module));
+  // };
 
-  const fetchModules = async () => {
-    const modules = await coursesClient.findModulesForCourse(cid as string);
-    dispatch(setModules(modules));
-  };
-
-  const removeModule = async (moduleId: string) => {
-    await modulesClient.deleteModule(moduleId);
-    dispatch(deleteModule(moduleId));
-  };
+  // const removeModule = async (moduleId: string) => {
+  //   await modulesClient.deleteModule(moduleId);
+  //   dispatch(deleteModule(moduleId));
+  // };
 
   const saveModule = async (module: any) => {
     await modulesClient.updateModule(module);
     dispatch(updateModule(module));
   };
 
+  const fetchModulesForCourse = async () => {
+    const modules = await coursesClient.findModulesForCourse(cid!);
+    dispatch(setModules(modules));
+  };
+
+  const addModuleHandler = async () => {
+    const newModule = await coursesClient.createModuleForCourse(cid!, {
+      name: moduleName,
+      course: cid,
+    });
+    dispatch(addModule(newModule));
+    setModuleName("");
+  };
+
+  const deleteModuleHandler = async (moduleId: string) => {
+    await modulesClient.deleteModule(moduleId);
+    dispatch(deleteModule(moduleId));
+  };
+
+  const updateModuleHandler = async (module: any) => {
+    await modulesClient.updateModule(module);
+    dispatch(updateModule(module));
+  };
+
   useEffect(() => {
-    fetchModules();
-  }, []);
+    fetchModulesForCourse();
+  }, [cid]);
+
 
   const isFaculty = currentUser.role === "FACULTY"
 
@@ -52,7 +72,7 @@ export default function Modules() {
         <ModulesControls
           setModuleName={setModuleName}
           moduleName={moduleName}
-          addModule={createModuleForCourse}
+          addModule={addModuleHandler}
         />
         <br />
         <br />
@@ -68,25 +88,19 @@ export default function Modules() {
                 <BsGripVertical className="me-2 fs-3" />{" "}
                 {!module.editing && module.name}
                 {module.editing && (
-                  <input
-                    className="form-control w-50 d-inline-block"
-                    onChange={(e) =>
-                      dispatch(
-                        updateModule({ ...module, name: e.target.value })
-                      )
-                    }
+                  <input onChange={(e) =>
+                    updateModuleHandler({ ...module, name: e.target.value })}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
-                        saveModule({ ...module, editing: false });
+                        updateModuleHandler({ ...module, editing: false });
                       }
                     }}
-                    defaultValue={module.name}
-                  />
+                    value={module.name} />
                 )}
                 {isFaculty &&
                   <ModuleControlButtons
                     moduleId={module._id}
-                    deleteModule={(moduleId) => removeModule(moduleId)}
+                    deleteModule={(moduleId) => deleteModuleHandler(moduleId)}
                     editModule={(moduleId) => dispatch(editModule(moduleId))}
                   />
                 }
