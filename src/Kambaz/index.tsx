@@ -101,7 +101,6 @@ export default function Kambaz() {
     }
   }, [currentUser, enrolling]);
 
-
   return (
     <Session>
       <div id="wd-kambaz">
