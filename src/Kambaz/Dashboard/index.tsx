@@ -26,7 +26,6 @@ export default function Dashboard(
   }
 ) {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const { enrollments } = useSelector((state: any) => state.enrollmentReducer);
 
   const isFaculty = currentUser.role === "FACULTY";
 
