@@ -78,11 +78,6 @@ export default function Dashboard(
         <Row xs={1} md={5} className="g-4">
           {courses
             .map((course) => {
-              const isEnrolled = enrollments.some(
-                (enrollment: any) =>
-                  enrollment.user === currentUser._id &&
-                  enrollment.course === course._id
-              );
               return (
                 <Col
                   key={course._id}
